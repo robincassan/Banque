@@ -1,9 +1,10 @@
 
-public class Compte {
-	private float uniqueNumber;
-	private float montant;
-	private Proprietaire proprietaire;
-	private float decouvert;
+public abstract class Compte {
+
+	protected float uniqueNumber;
+	protected float montant;
+	protected Proprietaire proprietaire;
+	protected float decouvert;
 
 	public Compte(float uniqueNumber, float montant, Proprietaire proprietaire, float decouvert) {
 		super();
@@ -21,25 +22,49 @@ public class Compte {
 		this.uniqueNumber = uniqueNumber;
 	}
 
-// methode verserespece
-	public float verserEspece(float versement) {
-		return this.montant + versement;
+// methode abstraite verserespece
+	public abstract void verserEspece(float montant);
 
-	}
+// methode abstraite retirerespece
+	public abstract void retirerEspece(float montant);
 
-// methode retirerespece
-	public float retirerEspece(float retrait) {
-		return this.montant - retrait;
-	}
-
-	// methode virement
+	// méthode virement
 	public void virement(Compte compte2, float montant) {
-		if (this.proprietaire == compte2.proprietaire) {
-			this.montant += montant;
-			compte2.montant -= montant;
+
+		if (this.proprietaire == compte2.getProprietaire()) {
+			compte2.retirerEspece(montant);
+			this.verserEspece(montant);
+		} else {
+			compte2.retirerEspece(montant + 1);
+			this.verserEspece(montant);
+
 		}
-		this.montant += montant;
-		compte2.montant -= montant - 1;
+
+		System.out.println("Le montant est supérieur au découvert autorisé : virement refusé");
+	}
+
+	public float getMontant() {
+		return montant;
+	}
+
+	public void setMontant(float montant) {
+		this.montant = montant;
+	}
+
+	public Proprietaire getProprietaire() {
+		return proprietaire;
+	}
+
+	public void setProprietaire(Proprietaire proprietaire) {
+		this.proprietaire = proprietaire;
+	}
+
+	public float getDecouvert() {
+		return decouvert;
+	}
+
+	public void setDecouvert(float decouvert) {
+		this.decouvert = decouvert;
 	}
 
 }
